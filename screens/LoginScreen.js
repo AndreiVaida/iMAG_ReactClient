@@ -15,7 +15,7 @@ export default class LoginScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.stayLeft}>
+                <View style={styles.stayCenter}>
                     <Text>Login</Text>
                 </View>
                 <Text>E-mail:</Text>
@@ -32,7 +32,7 @@ export default class LoginScreen extends React.Component {
                     placeholder="introdu parola"
                 />
 
-                <View style={{marginTop: 30}}>
+                <View style={styles.button}>
                     <Button
                         title="Login"
                         color="#841584"
@@ -42,7 +42,9 @@ export default class LoginScreen extends React.Component {
                         }
                     />
                 </View>
-                <Text>{this.state.errorMessage}</Text>
+                <View style={styles.stayCenter}>
+                    <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+                </View>
             </View>
         );
     }
@@ -73,12 +75,13 @@ export default class LoginScreen extends React.Component {
                     try {
                         await AsyncStorage.setItem('userId', userId.toString());
                         await AsyncStorage.setItem('token', token.toString());
+                        // go to login screen
+                        thisVar.props.navigation.navigate('WishlistScreen');
+
                     } catch (error) {
                         console.log("error at save: " + error);
                     }
                 });
-                // go to login screen
-                thisVar.props.navigation.navigate('WishlistScreen');
             })
             .catch(err => {
                 if (err === "Something went wrong.") {
@@ -93,20 +96,27 @@ export default class LoginScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        margin: 20,
         backgroundColor: '#fff',
-        alignItems: 'center',
         justifyContent: 'center',
     },
-    stayLeft: {
-        backgroundColor: '#fff',
-        alignItems: 'flex-start',
+    stayCenter: {
+        alignItems: 'center',
+    },
+    button: {
+        alignItems: 'center',
+        margin: 20,
     },
     inputStyle: {
         height: 40,
-        width: 300,
-        margin: 5,
+        marginTop: 5,
+        marginBottom: 5,
         padding: 10,
         borderColor: 'gray',
-        borderWidth: 1
+        borderWidth: 1,
+        alignItems: 'center',
+    },
+    errorMessage: {
+        color: 'red',
     },
 });

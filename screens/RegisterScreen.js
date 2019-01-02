@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, StyleSheet, Text, TextInput, View, AsyncStorage} from 'react-native';
+import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import {ServerUrl} from "../App";
 
 export default class RegisterScreen extends React.Component {
@@ -17,18 +17,28 @@ export default class RegisterScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Creare cont</Text>
+                <View style={styles.stayCenter}>
+                    <Text>Creare cont</Text>
+                </View>
+                <Text>E-mail:</Text>
                 <TextInput
                     style={styles.inputStyle}
                     onChangeText={(newEmail) => this.setState({email: newEmail})}
                     placeholder="introdu adresa de e-mail"
                 />
+                <Text>Nume:</Text>
                 <TextInput
                     style={styles.inputStyle}
-                    secureTextEntry={true}
-                    onChangeText={(newPassword) => this.setState({password: newPassword})}
-                    placeholder="introdu parola"
+                    onChangeText={(newName) => this.setState({name: newName})}
+                    placeholder="introdu numele tău"
                 />
+                <Text>Data nașterii:</Text>
+                <TextInput
+                    style={styles.inputStyle}
+                    onChangeText={(newBirthday) => this.setState({birthday: newBirthday})}
+                    placeholder="introdu data nașterii"
+                />
+                <Text>Parola:</Text>
                 <TextInput
                     style={styles.inputStyle}
                     secureTextEntry={true}
@@ -36,30 +46,34 @@ export default class RegisterScreen extends React.Component {
                     placeholder="introdu parola"
                 />
 
-                <View style={{marginTop: 30}}>
+                <View style={styles.button}>
                     <Button
-                        title="Login"
+                        title="Creează contul"
                         color="#841584"
-                        accessibilityLabel="Intră în cont"
+                        accessibilityLabel="Register"
                         onPress={() =>
-                            this.login(this.state.email, this.state.password)
+                            this.register(this.state.email, this.state.name, this.state.birthday, this.state.password)
                         }
                     />
                 </View>
-                <Text>{this.state.errorMessage}</Text>
+                <View style={styles.stayCenter}>
+                    <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+                </View>
             </View>
         );
     }
 
-    login(email, password) {
+    register(email, name, birthday, password) {
         let thisVar = this;
 
         const body = {
             'email': email,
+            'name': name,
+            'birthday': birthday,
             'password': password,
         };
 
-        fetch(ServerUrl + "/user/login", {
+        fetch(ServerUrl + "/user/register", {
             body: JSON.stringify(body),
             headers: {
                 'content-type': 'application/json',
@@ -70,61 +84,12 @@ export default class RegisterScreen extends React.Component {
                 if (!response.ok) {
                     throw response;
                 }
-                response.json().then(jsonResponse => {
-                    const userId = jsonResponse["userId"];
-                    const token = jsonResponse["token"];
-                    // save in local storage
-                    let _storeData = async () => {
-                        try {
-                            console.log("1");
-                            await AsyncStorage.setItem('userId', userId, (err) => {console.log(err)});
-                            console.log("2");
-                            await AsyncStorage.setItem('token', 'token');
-                        } catch (error) {
-                            console.log("Something went wrong.");
-                            throw "Something went wrong.";
-                        }
-                        console.log("SAVED");
-                    };
-                });
-
-                let userId = null;
-                let token = null;
-                let _retrieveData = async () => {
-                    console.log("3");
-                    try {
-                        await AsyncStorage.getItem('userId').then((value) => {
-                            console.log("4");
-                            userId=JSON.parse(value);
-                            console.log("Merge");
-                            console.log(userId);
-                        }).done();
-                        console.log("5");
-
-                        await AsyncStorage.getItem('token');
-                        console.log("id 1: " + userId);
-                        console.log("token 1:" + token);
-
-                        if (userId == null || token == null) {
-                            console.log("ERROR NULL");
-                            thisVar.props.navigation.navigate('LoginScreen');
-                        }
-                    } catch (error) {
-                        console.log("ERROR err: " + error);
-                        thisVar.props.navigation.navigate('LoginScreen');
-                    }
-                };
-                console.log("6");
-                //thisVar.props.navigation.navigate('WishlistScreen');
+                // go to login screen
+                thisVar.props.navigation.navigate('LoginScreen');
             })
             .catch(err => {
-                console.log("catch: " + err);
-                if (err === "Something went wrong.") {
-                    thisVar.setState({errorMessage: "Eroare la login. Șterge datele aplicației și încearcă din nou."})
-                }
-                else {
-                    thisVar.setState({errorMessage: "E-mail sau parolă greșită."})
-                }
+                console.log(err.toString());
+                thisVar.setState({errorMessage: err.toString()})
             })
     }
 }
@@ -132,16 +97,27 @@ export default class RegisterScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        margin: 20,
         backgroundColor: '#fff',
-        alignItems: 'center',
         justifyContent: 'center',
+    },
+    stayCenter: {
+        alignItems: 'center',
+    },
+    button: {
+        alignItems: 'center',
+        margin: 20,
     },
     inputStyle: {
         height: 40,
-        width: 300,
-        margin: 5,
+        marginTop: 5,
+        marginBottom: 5,
         padding: 10,
         borderColor: 'gray',
-        borderWidth: 1
+        borderWidth: 1,
+        alignItems: 'center',
+    },
+    errorMessage: {
+        color: 'red',
     },
 });

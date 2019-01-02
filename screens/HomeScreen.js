@@ -27,13 +27,23 @@ export default class HomeScreen extends React.Component {
                         }
                     />
                 </View>
-                <View>
+                <View style={styles.buttonView}>
                     <Button
                         title="Login"
                         color="#841584"
                         accessibilityLabel="Access your account"
                         onPress={() =>
                             this.props.navigation.navigate('LoginScreen')
+                        }
+                    />
+                </View>
+                <View style={styles.buttonView}>
+                    <Button
+                        title="Creare cont"
+                        color="#841584"
+                        accessibilityLabel="Create e nea account"
+                        onPress={() =>
+                            this.props.navigation.navigate('RegisterScreen')
                         }
                     />
                 </View>
@@ -50,6 +60,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonView: {
-        margin: 20,
+        margin: 10,
     }
 });
