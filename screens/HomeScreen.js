@@ -41,7 +41,7 @@ export default class HomeScreen extends React.Component {
                     <Button
                         title="Creare cont"
                         color="#841584"
-                        accessibilityLabel="Create e nea account"
+                        accessibilityLabel="Create e new account"
                         onPress={() =>
                             this.props.navigation.navigate('RegisterScreen')
                         }
