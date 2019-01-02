@@ -7,7 +7,7 @@ let pageNumber;
 let itemsPerPage;
 let totalPages;
 
-export default class ShowProductsScreen extends React.Component {
+export default class ProductsListScreen extends React.Component {
     constructor(props) {
         super(props);
         pageNumber = 1;
@@ -34,8 +34,10 @@ export default class ShowProductsScreen extends React.Component {
                                 if (details != null && details.length > 20) {
                                     details = details.substr(0, 20);
                                 }
-                                return <ListItem key={product.id} title={product.name} subtitle={details}
-                                                 rightTitle={"Preț: " + product.price + " lei"}>ceva</ListItem>
+                                return <ListItem key={product.id} title={product.name} subtitle={details} rightTitle={"Preț: " + product.price + " lei"}
+                                                 onPress={() =>
+                                                     this.props.navigation.navigate('ProductDetailsScreen', {product: product})
+                                                 }/>
                             })
                         }
                     </List>

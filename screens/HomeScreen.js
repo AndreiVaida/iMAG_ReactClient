@@ -12,7 +12,7 @@ export default class HomeScreen extends React.Component {
                     color="#841584"
                     accessibilityLabel="See all products"
                     onPress={() =>
-                        this.props.navigation.navigate('ShowProductsScreen')
+                        this.props.navigation.navigate('ProductsListScreen')
                     }
                 />
             </View>
