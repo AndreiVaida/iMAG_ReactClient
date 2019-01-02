@@ -11,7 +11,7 @@ export default class ShowProductsScreen extends React.Component {
     constructor(props) {
         super(props);
         pageNumber = 1;
-        itemsPerPage = 10;
+        itemsPerPage = 11;
         totalPages = 1;
         this.state = {
             'productList': [],
@@ -23,7 +23,10 @@ export default class ShowProductsScreen extends React.Component {
             <View style={styles.container}>
                 <View style={styles.title}><Text>All products</Text></View>
 
-                <ScrollView>
+                <ScrollView
+                    onScroll={({nativeEvent}) => {
+                        this.loadProductsIfNeeded(nativeEvent);
+                    }}>
                     <List>
                         {
                             this.state.productList.map((product) => {
@@ -41,6 +44,21 @@ export default class ShowProductsScreen extends React.Component {
         );
     }
 
+    loadProductsIfNeeded(nativeEvent) {
+        if (this.isCloseToBottom(nativeEvent)) {
+            if (pageNumber < totalPages) {
+                pageNumber++;
+                this.loadProducts()
+            }
+        }
+    }
+
+    isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+        const paddingToBottom = 50;
+        return layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom;
+    };
+
     componentDidMount() {
         this.loadProducts();
     }
@@ -51,7 +69,7 @@ export default class ShowProductsScreen extends React.Component {
         fetch(ServerUrl + "/product?pageNumber=" + pageNumber + "&itemsPerPage=" + itemsPerPage, {
             body: null,
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
             },
             method: 'GET',
         })
@@ -64,8 +82,12 @@ export default class ShowProductsScreen extends React.Component {
                 totalPages = jsonProductsPage["totalPages"];
                 let productsJson = jsonProductsPage["content"];
 
+                let newProductList = thisVar.state.productList.slice();
+                for (let i = 0; i < productsJson.length; i++) {
+                    newProductList.push(productsJson[i]);
+                }
                 thisVar.setState({
-                    'productList': productsJson
+                    'productList': newProductList
                 });
             });
     }
@@ -85,3 +107,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 });
+
+
