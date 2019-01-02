@@ -1,8 +1,46 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, Button, StyleSheet, Text, View} from 'react-native';
 
 export default class HomeScreen extends React.Component {
+    constructor(props) {
+        console.log("constructor");
+        super(props);
+        this.state = {
+            loginButtonText: "Login",
+            isLoggedIn: false,
+        };
+    }
+
+    componentDidMount() { //TODO
+        console.log("componentDidMount");
+        let thisVar = this;
+        let start = async () => {
+            try {
+                const userId = await AsyncStorage.getItem('userId');
+                const token = await AsyncStorage.getItem('token');
+
+                if (this.isLoggedIn(userId, token)) {
+                    thisVar.setState({loginButtonText:  "Logout"});
+                    thisVar.setState({isLoggedIn:  true});
+                }
+                else {
+                    thisVar.setState({loginButtonText:  "Login"});
+                    thisVar.setState({isLoggedIn:  false});
+                }
+            } catch (error) {
+                thisVar.setState({loginButtonText:  "Login"});
+                thisVar.setState({isLoggedIn:  false});
+            }
+        };
+        start();
+    }
+
+    isLoggedIn(userId, token) {
+        return userId != null && token != null;
+    }
+
     render() {
+        console.log("render");
         return (
             <View style={styles.container}>
                 <Text>Welcome to iMAG !</Text>
@@ -29,11 +67,11 @@ export default class HomeScreen extends React.Component {
                 </View>
                 <View style={styles.buttonView}>
                     <Button
-                        title="Login"
+                        title={this.state.loginButtonText}
                         color="#841584"
                         accessibilityLabel="Access your account"
                         onPress={() =>
-                            this.props.navigation.navigate('LoginScreen')
+                            this.loginOrLogout()
                         }
                     />
                 </View>
@@ -49,6 +87,30 @@ export default class HomeScreen extends React.Component {
                 </View>
             </View>
         );
+    }
+
+    loginOrLogout() {
+        if (this.state.isLoggedIn) {
+            this.logout();
+        }
+        else {
+            this.props.navigation.navigate('LoginScreen')
+        }
+    }
+
+    logout() {
+        let thisVar = this;
+        let start = async () => {
+            try {
+                await AsyncStorage.removeItem('userId');
+                await AsyncStorage.removeItem('token');
+                thisVar.setState({loginButtonText:  "Login"});
+                thisVar.setState({isLoggedIn:  false});
+            } catch (error) {
+                console.log("Error when removing userId and token from local storage.")
+            }
+        };
+        start();
     }
 }
 
