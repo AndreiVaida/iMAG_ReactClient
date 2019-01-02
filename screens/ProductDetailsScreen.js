@@ -26,9 +26,9 @@ export default class ProductDetailsScreen extends React.Component {
                     />
                     <Text style={styles.titleLeft}>{product.name}</Text>
                     <Text style={styles.itemLeft}>{product.price + " lei"}</Text>
-                </View>
-                <View>
-                    <Text>{product.details}</Text>
+                    <View style={styles.details}>
+                        <Text>{product.details}</Text>
+                    </View>
                 </View>
                 <View style={styles.wishlistButtonView}>
                     <Button
@@ -122,6 +122,11 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         fontSize: 20,
+    },
+    details: {
+        position: 'absolute',
+        left: 0,
+        top: 150,
     },
     wishlistButtonView: {
         position: 'absolute',

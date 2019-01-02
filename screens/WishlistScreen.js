@@ -9,13 +9,19 @@ export default class WishlistScreen extends React.Component {
         super(props);
         this.state = {
             'productList': [],
+            'message': " ",
+            'messageColor': "black"
         };
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.title}><Text>Wishlist</Text></View>
+                <View style={styles.title}>
+                    <Text>Wishlist</Text>
+                    <Text>Apasă lung pe un produs pentru a-l elimina.</Text>
+                    <Text style={{color: this.state.messageColor}}>{this.state.message}</Text>
+                </View>
 
                 <ScrollView>
                     <List>
@@ -29,6 +35,9 @@ export default class WishlistScreen extends React.Component {
                                                  rightTitle={"Preț: " + product.price + " lei"}
                                                  onPress={() =>
                                                      this.props.navigation.navigate('ProductDetailsScreen', {product: product})
+                                                 }
+                                                 onLongPress={() =>
+                                                     this.removeProductFromWishlist(product.id)
                                                  }/>
                             })
                         }
@@ -38,12 +47,57 @@ export default class WishlistScreen extends React.Component {
         );
     }
 
+    removeProductFromWishlist(productId) {
+        let start = async () => {
+            let thisVar = this;
+            let userId = null;
+            let token = null;
+
+            try {
+                userId = await AsyncStorage.getItem('userId');
+                token = await AsyncStorage.getItem('token');
+
+                if (userId == null || token == null) {
+                    thisVar.props.navigation.navigate('LoginScreen');
+                }
+            } catch (error) {
+                thisVar.props.navigation.navigate('LoginScreen');
+            }
+
+            fetch(ServerUrl + "/user/wishlist", {
+                body: null,
+                headers: {
+                    'content-type': 'application/json',
+                    'token': token,
+                    'userId': userId,
+                    'productId': productId,
+                },
+                method: 'DELETE',
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw response;
+                    }
+                    // show success on the screen
+                    thisVar.setState({message: "Eliminat din wishlist"});
+                    thisVar.setState({messageColor: "#066d1c"});
+                    thisVar.loadWishlist();
+                })
+                .catch(err => {
+                    console.log(err.toString());
+                    thisVar.setState({wishlistButtonText: "Nu s-a eliminat din wishlist"});
+                    thisVar.setState({messageColor: "#6d0606"});
+                })
+        };
+        start();
+    }
+
     componentDidMount() {
         this.loadWishlist();
     }
 
     loadWishlist() {
-        let startLoadingWishlist = async () => {
+        let start = async () => {
             let thisVar = this;
             let userId = null;
             let token = null;
@@ -83,7 +137,7 @@ export default class WishlistScreen extends React.Component {
                 });
 
         };
-        startLoadingWishlist();
+        start();
     }
 }
 
