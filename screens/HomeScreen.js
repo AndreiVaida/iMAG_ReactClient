@@ -7,14 +7,28 @@ export default class HomeScreen extends React.Component {
             <View style={styles.container}>
                 <Text>Welcome to iMAG !</Text>
 
-                <Button
-                    title="Vezi toate produsele"
-                    color="#841584"
-                    accessibilityLabel="See all products"
-                    onPress={() =>
-                        this.props.navigation.navigate('ProductsListScreen')
-                    }
-                />
+                <View style={styles.buttonView}>
+                    <Button
+                        title="Vezi toate produsele"
+                        accessibilityLabel="See all products"
+                        color="#841584"
+                        margin="20"
+                        onPress={() =>
+                            this.props.navigation.navigate('ProductsListScreen')
+                        }
+                    />
+                </View>
+                <View>
+                    <Button
+                        title="Login"
+                        color="#841584"
+                        margin="20"
+                        accessibilityLabel="Intră în cont"
+                        onPress={() =>
+                            this.props.navigation.navigate('LoginScreen')
+                        }
+                    />
+                </View>
             </View>
         );
     }
@@ -27,4 +41,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    buttonView: {
+        margin: 20,
+    }
 });

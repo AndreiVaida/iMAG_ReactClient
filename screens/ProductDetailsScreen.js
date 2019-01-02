@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 
 
 export default class ProductDetailsScreen extends React.Component {
@@ -12,13 +12,20 @@ export default class ProductDetailsScreen extends React.Component {
     }
 
     render() {
+        const product = this.state.product;
         return (
             <View style={styles.container}>
                 <View style={styles.title}><Text>Product details</Text></View>
                 <View>
-                    <Text style={styles.titleLeft}>{this.state.product.name}</Text>
-                    <Text style={styles.itemLeft}>{this.state.product.price + " lei"}</Text>
-                    <Text>{this.state.product.details}</Text>
+                    <Image
+                        style={styles.image}
+                        source={{uri: 'data:image/png;base64,' + product.image}}
+                    />
+                    <Text style={styles.titleLeft}>{product.name}</Text>
+                    <Text style={styles.itemLeft}>{product.price + " lei"}</Text>
+                </View>
+                <View>
+                    <Text>{product.details}</Text>
                 </View>
             </View>
         );
@@ -38,7 +45,17 @@ const styles = StyleSheet.create({
         margin: 20,
         alignItems: 'center',
     },
+    image: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: 100,
+        height: 120,
+    },
     titleLeft: {
+        position: 'absolute',
+        left: 120,
+        top: 0,
         fontWeight: 'bold',
         fontSize: 20,
     },
