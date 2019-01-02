@@ -1,6 +1,7 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {ServerUrl} from '../App'
+import {List, ListItem} from "react-native-elements";
 
 let pageNumber;
 let itemsPerPage;
@@ -10,58 +11,62 @@ export default class ShowProductsScreen extends React.Component {
     constructor(props) {
         super(props);
         pageNumber = 1;
-        itemsPerPage = 5;
+        itemsPerPage = 10;
         totalPages = 1;
         this.state = {
-            productList: 'No products available.'
-        }
+            'productList': [],
+        };
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text>All products </Text>
-                <Text>
-                    {ServerUrl + "/product?pageNumber=" + pageNumber + "&itemsPerPage=" + itemsPerPage}
-                </Text>
-                <Text ref={div => {this.productsDiv = div;}} id="productsDiv">
-                    {this.state.productList}
-                </Text>
+                <View style={styles.title}><Text>All products</Text></View>
+
+                <ScrollView>
+                    <List>
+                        {
+                            this.state.productList.map((product) => {
+                                let details = product.details;
+                                if (details != null && details.length > 20) {
+                                    details = details.substr(0, 20);
+                                }
+                                return <ListItem key={product.id} title={product.name} subtitle={details}
+                                                 rightTitle={"Preț: " + product.price + " lei"}>ceva</ListItem>
+                            })
+                        }
+                    </List>
+                </ScrollView>
             </View>
         );
     }
 
     componentDidMount() {
+        this.loadProducts();
+    }
+
+    loadProducts() {
         let thisVar = this;
 
         fetch(ServerUrl + "/product?pageNumber=" + pageNumber + "&itemsPerPage=" + itemsPerPage, {
             body: null,
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, same-origin, *omit
             headers: {
                 'content-type': 'application/json'
             },
             method: 'GET',
-            mode: 'cors', // no-cors, cors, *same-origin
-            redirect: 'follow', // *manual, follow, error
-            referrer: 'no-referrer', // *client, no-referrer
         })
             .then(function (response) {
-                // manipulate response object
-                // check status @ response.status etc.
-                return response.json(); // parses json
+                // TODO: check status @ response.status etc.
+                return response.json();
             })
             .then(function (jsonProductsPage) {
-                // use parsed result
                 pageNumber = jsonProductsPage["pageNumber"];
                 totalPages = jsonProductsPage["totalPages"];
-                let products = jsonProductsPage["content"];
+                let productsJson = jsonProductsPage["content"];
 
-                for (let i = 0; i < products.length; i++) {
-                    let product = products[i];
-                    let productDiv = "<Text>" + product["name"] + "    " + product["price"] + "</Text>";
-                    thisVar.setState({productList: productDiv});
-                }
+                thisVar.setState({
+                    'productList': productsJson
+                });
             });
     }
 }
@@ -70,7 +75,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        marginLeft: 20,
+        marginRight: 20,
+        //alignItems: 'center',
+        //justifyContent: 'center',
+    },
+    title: {
+        margin: 20,
         alignItems: 'center',
-        justifyContent: 'center',
     },
 });
