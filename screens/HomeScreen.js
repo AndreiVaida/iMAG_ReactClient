@@ -12,9 +12,18 @@ export default class HomeScreen extends React.Component {
                         title="Vezi toate produsele"
                         accessibilityLabel="See all products"
                         color="#841584"
-                        margin="20"
                         onPress={() =>
                             this.props.navigation.navigate('ProductsListScreen')
+                        }
+                    />
+                </View>
+                <View style={styles.buttonView}>
+                    <Button
+                        title="Wishlist"
+                        accessibilityLabel="See your favorite products"
+                        color="#841584"
+                        onPress={() =>
+                            this.props.navigation.navigate('WishlistScreen')
                         }
                     />
                 </View>
@@ -22,8 +31,7 @@ export default class HomeScreen extends React.Component {
                     <Button
                         title="Login"
                         color="#841584"
-                        margin="20"
-                        accessibilityLabel="Intră în cont"
+                        accessibilityLabel="Access your account"
                         onPress={() =>
                             this.props.navigation.navigate('LoginScreen')
                         }

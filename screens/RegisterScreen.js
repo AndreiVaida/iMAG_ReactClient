@@ -1,12 +1,14 @@
 import React from 'react';
-import {AsyncStorage, Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Button, StyleSheet, Text, TextInput, View, AsyncStorage} from 'react-native';
 import {ServerUrl} from "../App";
 
-export default class LoginScreen extends React.Component {
+export default class RegisterScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             email: '',
+            name: '',
+            birthday: '',
             password: '',
             errorMessage: '',
         };
@@ -15,16 +17,18 @@ export default class LoginScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.stayLeft}>
-                    <Text>Login</Text>
-                </View>
-                <Text>E-mail:</Text>
+                <Text>Creare cont</Text>
                 <TextInput
                     style={styles.inputStyle}
                     onChangeText={(newEmail) => this.setState({email: newEmail})}
                     placeholder="introdu adresa de e-mail"
                 />
-                <Text>Parola:</Text>
+                <TextInput
+                    style={styles.inputStyle}
+                    secureTextEntry={true}
+                    onChangeText={(newPassword) => this.setState({password: newPassword})}
+                    placeholder="introdu parola"
+                />
                 <TextInput
                     style={styles.inputStyle}
                     secureTextEntry={true}
@@ -66,24 +70,59 @@ export default class LoginScreen extends React.Component {
                 if (!response.ok) {
                     throw response;
                 }
-                response.json().then(async jsonResponse => {
+                response.json().then(jsonResponse => {
                     const userId = jsonResponse["userId"];
                     const token = jsonResponse["token"];
                     // save in local storage
-                    try {
-                        await AsyncStorage.setItem('userId', userId.toString());
-                        await AsyncStorage.setItem('token', token.toString());
-                    } catch (error) {
-                        console.log("error at save: " + error);
-                    }
+                    let _storeData = async () => {
+                        try {
+                            console.log("1");
+                            await AsyncStorage.setItem('userId', userId, (err) => {console.log(err)});
+                            console.log("2");
+                            await AsyncStorage.setItem('token', 'token');
+                        } catch (error) {
+                            console.log("Something went wrong.");
+                            throw "Something went wrong.";
+                        }
+                        console.log("SAVED");
+                    };
                 });
-                // go to login screen
-                thisVar.props.navigation.navigate('WishlistScreen');
+
+                let userId = null;
+                let token = null;
+                let _retrieveData = async () => {
+                    console.log("3");
+                    try {
+                        await AsyncStorage.getItem('userId').then((value) => {
+                            console.log("4");
+                            userId=JSON.parse(value);
+                            console.log("Merge");
+                            console.log(userId);
+                        }).done();
+                        console.log("5");
+
+                        await AsyncStorage.getItem('token');
+                        console.log("id 1: " + userId);
+                        console.log("token 1:" + token);
+
+                        if (userId == null || token == null) {
+                            console.log("ERROR NULL");
+                            thisVar.props.navigation.navigate('LoginScreen');
+                        }
+                    } catch (error) {
+                        console.log("ERROR err: " + error);
+                        thisVar.props.navigation.navigate('LoginScreen');
+                    }
+                };
+                console.log("6");
+                //thisVar.props.navigation.navigate('WishlistScreen');
             })
             .catch(err => {
+                console.log("catch: " + err);
                 if (err === "Something went wrong.") {
                     thisVar.setState({errorMessage: "Eroare la login. Șterge datele aplicației și încearcă din nou."})
-                } else {
+                }
+                else {
                     thisVar.setState({errorMessage: "E-mail sau parolă greșită."})
                 }
             })
@@ -96,10 +135,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    stayLeft: {
-        backgroundColor: '#fff',
-        alignItems: 'flex-start',
     },
     inputStyle: {
         height: 40,
