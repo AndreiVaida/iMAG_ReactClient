@@ -24,7 +24,7 @@ export default class ProductsListScreen extends React.Component {
             <View style={styles.container}>
                 <View style={styles.title}>
                     <Text>All products</Text>
-                    <Text style={{color: 'yellow'}}>{this.state.message}</Text>
+                    <Text style={{color: '#b2a707'}}>{this.state.message}</Text>
                 </View>
 
                 <ScrollView

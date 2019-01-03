@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="df8c481c-75a9-41e2-9891-9d15a96ae179" name="Default Changelist" comment="">
+    <list default="true" id="df8c481c-75a9-41e2-9891-9d15a96ae179" name="Default Changelist" comment="Local storage for products and wishlist.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/HomeScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/ProductsListScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/ProductsListScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/WishlistScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/WishlistScreen.js" afterDir="false" />
     </list>
@@ -15,23 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/screens/ProductsListScreen.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="381">
-              <caret line="131" selection-start-line="131" selection-end-line="131" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/screens/WishlistScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="179" selection-start-line="179" selection-end-line="179" />
+            <state relative-caret-position="303">
+              <caret line="146" column="48" lean-forward="true" selection-start-line="146" selection-start-column="48" selection-end-line="146" selection-end-column="48" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -50,13 +37,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>stackNa</find>
-      <find>configurations</find>
-      <find>productUrl</find>
-      <find>productsDiv</find>
-      <find>Flat</find>
-      <find>PricingCard</find>
-      <find>ListItem</find>
       <find>AsyncStorage</find>
       <find>set</find>
       <find>StyleS</find>
@@ -72,8 +52,25 @@
       <find>setState</find>
       <find>login</find>
       <find>Contex</find>
+      <find>remove</find>
+      <find>logout</find>
+      <find>id id id id id id</find>
+      <find>removeProductFromWishlistOffline</find>
+      <find>Offline</find>
+      <find>task fa</find>
+      <find>json.str</find>
+      <find>task failed</find>
       <find>console.log</find>
+      <find>removeProd</find>
+      <find>yellow</find>
+      <find>message</find>
+      <find>loadWishlistFromLocalStorage</find>
+      <find>loadW</find>
+      <find>removeProduct</find>
     </findStrings>
+    <replaceStrings>
+      <replace>#b2a707</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -142,7 +139,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546466999473" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1546546419836" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../MyNotes" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -152,13 +149,13 @@
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\IntelliJ IDEA 2018.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Proiecte\AndroidStudio\iMag_React\components" />
+      <recent name="D:\Proiecte\AndroidStudio\iMag_React" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Proiecte\AndroidStudio\iMag_React\screens" />
       <recent name="D:\Proiecte\AndroidStudio\iMag_React\configurations" />
-      <recent name="D:\Proiecte\AndroidStudio\iMag_React" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Proiecte\AndroidStudio\iMag_React\components" />
       <recent name="D:\Proiecte\AndroidStudio\iMag_React" />
     </key>
   </component>
@@ -212,7 +209,7 @@
       <workItem from="1546370573539" duration="12077000" />
       <workItem from="1546419283674" duration="33065000" />
       <workItem from="1546506315222" duration="2859000" />
-      <workItem from="1546520533294" duration="12683000" />
+      <workItem from="1546520533294" duration="21708000" />
     </task>
     <task id="LOCAL-00001" summary="Navigation working from HomeScreen to ShowProductsScreen. Nothing implemented yet.">
       <created>1546374909039</created>
@@ -291,11 +288,18 @@
       <option name="project" value="LOCAL" />
       <updated>1546466767879</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Local storage for products and wishlist.">
+      <created>1546534163658</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1546534163658</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="69172000" />
+    <option name="totallyTimeSpent" value="78197000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -310,7 +314,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4182015" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.39111593" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.31419286" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -319,7 +323,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32936078" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.32936078" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50053304" side_tool="true" weight="0.39111593" />
       <window_info anchor="bottom" id="Messages" order="12" />
       <window_info anchor="bottom" id="Inspection Results" order="13" weight="0.32936078" />
       <window_info anchor="bottom" id="TypeScript" order="14" />
@@ -349,7 +353,8 @@
     <MESSAGE value="Add product to wishlist working." />
     <MESSAGE value="Remove from wishlist working !&#10;ProductDetails: product description is now correctly set in page." />
     <MESSAGE value="Update login-logout button. &#10;BUG: login-logout button is updated only at the start of the app !" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update login-logout button. &#10;BUG: login-logout button is updated only at the start of the app !" />
+    <MESSAGE value="Local storage for products and wishlist." />
+    <option name="LAST_COMMIT_MESSAGE" value="Local storage for products and wishlist." />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.gitignore">
@@ -469,26 +474,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/LoginScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="119" column="21" lean-forward="true" selection-start-line="119" selection-start-column="8" selection-end-line="119" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/screens/ProductDetailsScreen.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -499,10 +484,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/screens/LoginScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="551">
+          <caret line="119" column="21" lean-forward="true" selection-start-line="119" selection-start-column="8" selection-end-line="119" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/screens/ProductsListScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="381">
-          <caret line="131" selection-start-line="131" selection-end-line="131" />
+        <state relative-caret-position="165">
+          <caret line="143" column="27" lean-forward="true" selection-start-line="143" selection-start-column="27" selection-end-line="143" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="28" lean-forward="true" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -511,8 +516,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/WishlistScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="179" selection-start-line="179" selection-end-line="179" />
+        <state relative-caret-position="303">
+          <caret line="146" column="48" lean-forward="true" selection-start-line="146" selection-start-column="48" selection-end-line="146" selection-end-column="48" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
