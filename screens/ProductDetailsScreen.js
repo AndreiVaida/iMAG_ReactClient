@@ -2,6 +2,7 @@ import React from 'react';
 import {AsyncStorage, Button, Image, StyleSheet, Text, View} from 'react-native';
 import {ServerUrl} from "../App";
 
+const weAreOnline = false; // just for debugging purposes
 
 export default class ProductDetailsScreen extends React.Component {
     constructor(props) {
@@ -62,29 +63,60 @@ export default class ProductDetailsScreen extends React.Component {
                 thisVar.props.navigation.navigate('LoginScreen');
             }
 
-        fetch(ServerUrl + "/user/wishlist", {
-            body: null,
-            headers: {
-                'content-type': 'application/json',
-                'token': token,
-                'userId': userId,
-                'productId': productId,
-            },
-            method: 'POST',
-        })
-            .then(function (response) {
-                if (!response.ok) {
-                    throw response;
-                }
-                // show success on the screen
-                thisVar.setState({wishlistButtonText: "Adăugat în wishlist"});
-                thisVar.setState({wishlistButtonColor: "#066d1c"});
+            fetch(ServerUrl + "/user/wishlist", {
+                body: null,
+                headers: {
+                    'content-type': 'application/json',
+                    'token': token,
+                    'userId': userId,
+                    'productId': productId,
+                },
+                method: 'POST',
             })
-            .catch(err => {
-                console.log(err.toString());
-                thisVar.setState({wishlistButtonText: "Nu s-a adăugat în wishlist"});
-                thisVar.setState({wishlistButtonColor: "#6d0606"});
-            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        thisVar.setState({wishlistButtonText: "Nu s-a adăugat în wishlist"});
+                        thisVar.setState({wishlistButtonColor: "#6d0606"});
+                        return;
+                    }
+                    // show success on the screen
+                    thisVar.setState({wishlistButtonText: "Adăugat în wishlist"});
+                    thisVar.setState({wishlistButtonColor: "#066d1c"});
+                })
+                .catch(err => {
+                    this.setState({wishlistButtonText: "Produsul a fost adăugat doar local."});
+                    this.setState({wishlistButtonColor: "#b2a707"});
+                    thisVar.addProductToWishlistOffline(productId);
+                })
+        };
+        start();
+    }
+
+    addProductToWishlistOffline(productIdOriginal) {
+        let start = async () => {
+            try {
+                // update the product
+                const productId = "P_" + productIdOriginal;
+                let productJson = await AsyncStorage.getItem(productId);
+                const product = JSON.parse(productJson);
+                product["isInWishlist"] = true;
+                productJson = JSON.stringify(product);
+                await AsyncStorage.setItem(productId, productJson);
+
+                // add task to do when online
+                const taskToDoId = "T_" + productId;
+                const taskToDo = {
+                    id: taskToDoId,
+                    productId: productId,
+                    isInWishlist: true,
+                };
+                const taskToDoJson = JSON.stringify(taskToDo);
+                await AsyncStorage.setItem(taskToDoId, taskToDoJson);
+                console.log("Task saved: " + taskToDoJson);
+
+            } catch (e) {
+                console.log("Error at saving products: " + e.toString());
+            }
         };
         start();
     }
