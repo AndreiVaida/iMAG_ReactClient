@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {ServerUrl} from '../App'
 import {List, ListItem} from "react-native-elements";
 
@@ -15,13 +15,17 @@ export default class ProductsListScreen extends React.Component {
         totalPages = 1;
         this.state = {
             'productList': [],
+            'message': "Loading...",
         };
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.title}><Text>All products</Text></View>
+                <View style={styles.title}>
+                    <Text>All products</Text>
+                    <Text style={{color: 'yellow'}}>{this.state.message}</Text>
+                </View>
 
                 <ScrollView
                     onScroll={({nativeEvent}) => {
@@ -34,7 +38,8 @@ export default class ProductsListScreen extends React.Component {
                                 if (details != null && details.length > 20) {
                                     details = details.substr(0, 20);
                                 }
-                                return <ListItem key={product.id} title={product.name} subtitle={details} rightTitle={"Preț: " + product.price + " lei"}
+                                return <ListItem key={product.id} title={product.name} subtitle={details}
+                                                 rightTitle={"Preț: " + product.price + " lei"}
                                                  onPress={() =>
                                                      this.props.navigation.navigate('ProductDetailsScreen', {product: product})
                                                  }/>
@@ -76,14 +81,27 @@ export default class ProductsListScreen extends React.Component {
             method: 'GET',
         })
             .then(function (response) {
-                // TODO: check status @ response.status etc.
+                if (!response.ok) {
+                    thisVar.setState({'message': "Se afișează produsele salvate local."});
+                    thisVar.loadProductsFromLocalStorage();
+                    return null;
+                }
+                thisVar.setState({'message': ""});
                 return response.json();
             })
             .then(function (jsonProductsPage) {
+                if (jsonProductsPage == null) {
+                    return;
+                }
+
                 pageNumber = jsonProductsPage["pageNumber"];
                 totalPages = jsonProductsPage["totalPages"];
                 let productsJson = jsonProductsPage["content"];
 
+                // save the products in local storage
+                thisVar.saveProductsInLocalStorage(productsJson);
+
+                // update screen
                 let newProductList = thisVar.state.productList.slice();
                 for (let i = 0; i < productsJson.length; i++) {
                     newProductList.push(productsJson[i]);
@@ -91,7 +109,58 @@ export default class ProductsListScreen extends React.Component {
                 thisVar.setState({
                     'productList': newProductList
                 });
+            })
+            .catch(function () {
+                thisVar.setState({'message': "Se afișează produsele salvate local."});
+                thisVar.loadProductsFromLocalStorage();
             });
+    }
+
+    saveProductsInLocalStorage(productsJson) {
+        let start = async () => {
+            try {
+                for (let i = 0; i < productsJson.length; i++) {
+                    const product = productsJson[i];
+                    product["isInWishlist"] = false;
+                    const productId = "P_" + product["id"].toString();
+                    // check if the product already is stored
+                    const existingProductJson = await AsyncStorage.getItem(productId);
+                    const existingProduct = JSON.parse(existingProductJson);
+                    if (existingProduct != null && existingProduct["isInWishlist"] === true) {
+                        product["isInWishlist"] = true;
+                    }
+
+                    const productJson = JSON.stringify(product);
+                    await AsyncStorage.setItem(productId, productJson);
+                }
+            } catch (e) {
+                console.log("Error at saving products: " + e.toString());
+            }
+        };
+        start();
+    }
+
+    loadProductsFromLocalStorage() {
+        let thisVar = this;
+        let start = async () => {
+            try {
+                let products = [];
+                const keys = await AsyncStorage.getAllKeys();
+                const idPrefix = "P_";
+                for (let i = 0; i < keys.length; i++) {
+                    const key = keys[i];
+                    if (key.startsWith(idPrefix)) {
+                        const productJson = await AsyncStorage.getItem(key);
+                        const product = JSON.parse(productJson);
+                        products.push(product);
+                    }
+                }
+                thisVar.setState({'productList': products});
+            } catch (e) {
+                console.log("Error at getting products from local storage: " + e.toString());
+            }
+        };
+        start();
     }
 }
 

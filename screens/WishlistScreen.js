@@ -9,7 +9,7 @@ export default class WishlistScreen extends React.Component {
         super(props);
         this.state = {
             'productList': [],
-            'message': " ",
+            'message': "Loading...",
             'messageColor': "black"
         };
     }
@@ -127,15 +127,65 @@ export default class WishlistScreen extends React.Component {
                         thisVar.props.navigation.navigate('LoginScreen');
                         return Promise.reject("Failed to load wishlist.");
                     }
+                    thisVar.setState({message: " "});
                     return response.json();
                 })
                 .then(function (jsonProductsPage) {
                     let productsJson = jsonProductsPage["productDtos"];
+
+                    thisVar.saveWishlistInLocalStorage(productsJson);
+
                     thisVar.setState({
                         'productList': productsJson
                     });
+                })
+                .catch(function () {
+                    thisVar.setState({'message': "Se afișează produsele salvate local."});
+                    thisVar.loadWishlistFromLocalStorage();
                 });
 
+        };
+        start();
+    }
+
+    saveWishlistInLocalStorage(productsJson) {
+        let start = async () => {
+            try {
+                for (let i = 0; i < productsJson.length; i++) {
+                    const product = productsJson[i];
+                    const productId = "P_" + product["id"].toString();
+                    product["isInWishlist"] = true;
+                    const productJson = JSON.stringify(product);
+                    await AsyncStorage.setItem(productId, productJson);
+                }
+            } catch (e) {
+                console.log("Error at saving products: " + e.toString());
+            }
+        };
+        start();
+    }
+
+    loadWishlistFromLocalStorage() {
+        let thisVar = this;
+        let start = async () => {
+            try {
+                let products = [];
+                const keys = await AsyncStorage.getAllKeys();
+                const idPrefix = "P_";
+                for (let i = 0; i < keys.length; i++) {
+                    const key = keys[i];
+                    if (key.startsWith(idPrefix)) {
+                        const productJson = await AsyncStorage.getItem(key);
+                        const product = JSON.parse(productJson);
+                        if (product["isInWishlist"] === true) {
+                            products.push(product);
+                        }
+                    }
+                }
+                thisVar.setState({'productList': products});
+            } catch (e) {
+                console.log("Error at getting products from local storage: " + e.toString());
+            }
         };
         start();
     }

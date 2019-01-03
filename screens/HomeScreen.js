@@ -3,7 +3,6 @@ import {AsyncStorage, Button, StyleSheet, Text, View} from 'react-native';
 
 export default class HomeScreen extends React.Component {
     constructor(props) {
-        console.log("constructor");
         super(props);
         this.state = {
             loginButtonText: "Login",
@@ -11,8 +10,7 @@ export default class HomeScreen extends React.Component {
         };
     }
 
-    componentDidMount() { //TODO
-        console.log("componentDidMount");
+    componentDidMount() { //TODO ?
         let thisVar = this;
         let start = async () => {
             try {
@@ -40,7 +38,6 @@ export default class HomeScreen extends React.Component {
     }
 
     render() {
-        console.log("render");
         return (
             <View style={styles.container}>
                 <Text>Welcome to iMAG !</Text>
