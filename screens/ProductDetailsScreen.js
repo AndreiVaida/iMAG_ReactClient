@@ -26,7 +26,7 @@ export default class ProductDetailsScreen extends React.Component {
                         source={{uri: 'data:image/png;base64,' + product.image}}
                     />
                     <Text style={styles.titleLeft}>{product.name}</Text>
-                    <Text style={styles.itemLeft}>{product.price + " lei"}</Text>
+                    <Text style={styles.itemRight}>{product.price + " lei"}</Text>
                     <View style={styles.details}>
                         <Text>{product.details}</Text>
                     </View>
@@ -149,10 +149,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
     },
-    itemLeft: {
+    itemRight: {
         position: 'absolute',
         right: 0,
-        top: 0,
+        top: 50,
         fontSize: 20,
     },
     details: {
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     wishlistButtonView: {
         position: 'absolute',
         right: 0,
-        top: 100,
+        top: 150,
         width: 100,
         height: 50,
     },
