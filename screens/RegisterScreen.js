@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import DatePicker from 'react-native-datepicker'
 import {ServerUrl} from "../App";
 
 export default class RegisterScreen extends React.Component {
@@ -33,10 +34,15 @@ export default class RegisterScreen extends React.Component {
                     placeholder="introdu numele tău"
                 />
                 <Text>Data nașterii:</Text>
-                <TextInput
-                    style={styles.inputStyle}
-                    onChangeText={(newBirthday) => this.setState({birthday: newBirthday})}
-                    placeholder="introdu data nașterii"
+                <DatePicker
+                    style={{width: 200}}
+                    date={this.state.birthday}
+                    mode="date"
+                    placeholder="select date"
+                    format="YYYY-MM-DD"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    onDateChange={(date) => {this.setState({birthday: date})}}
                 />
                 <Text>Parola:</Text>
                 <TextInput
