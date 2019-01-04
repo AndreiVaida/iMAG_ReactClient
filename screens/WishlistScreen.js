@@ -1,5 +1,5 @@
 import React from 'react';
-import {AsyncStorage, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, NetInfo, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {ServerUrl} from '../App'
 import {List, ListItem} from "react-native-elements";
 
@@ -66,9 +66,10 @@ export default class WishlistScreen extends React.Component {
             }
 
             const weAreOnline = this.state.weAreOnline;
+            console.log(weAreOnline);
             if (!weAreOnline) {
-                this.setState({"message": "Produsul a fost șters doar local."});
-                this.setState({messageColor: "#b2a707"});
+                thisVar.setState({"message": "Produsul a fost șters doar local."});
+                thisVar.setState({messageColor: "#b2a707"});
                 thisVar.removeProductFromWishlistOffline(productId);
                 return;
             }
@@ -102,7 +103,21 @@ export default class WishlistScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.loadWishlist();
+        let thisVar = this;
+        NetInfo.getConnectionInfo().then((connectionInfo) => {
+            const connectionType = connectionInfo.type.toString();
+            console.log('Internet connection type: ' + connectionType);
+            if (connectionType !== "none") {
+                thisVar.setState({weAreOnline: true});
+                thisVar.loadWishlist();
+            }
+            else {
+                thisVar.setState({weAreOnline: false});
+                thisVar.setState({'message': "Se afișează produsele salvate local."});
+                thisVar.setState({messageColor: "#b2a707"});
+                thisVar.loadWishlistFromLocalStorage();
+            }
+        });
     }
 
     loadWishlist() {

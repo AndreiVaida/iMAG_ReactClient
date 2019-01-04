@@ -1,5 +1,5 @@
 import React from 'react';
-import {AsyncStorage, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, ScrollView, StyleSheet, Text, View, NetInfo} from 'react-native';
 import {ServerUrl} from '../App'
 import {List, ListItem} from "react-native-elements";
 
@@ -16,6 +16,7 @@ export default class ProductsListScreen extends React.Component {
         this.state = {
             'productList': [],
             'message': "Loading...",
+            "isConnected": true,
         };
     }
 
@@ -67,7 +68,20 @@ export default class ProductsListScreen extends React.Component {
     };
 
     componentDidMount() {
-        this.loadProducts();
+        let thisVar = this;
+        NetInfo.getConnectionInfo().then((connectionInfo) => {
+            const connectionType = connectionInfo.type.toString();
+            console.log('Internet connection type: ' + connectionType);
+            if (connectionType !== "none") {
+                thisVar.setState({isConnected: true});
+                thisVar.loadProducts();
+            }
+            else {
+                thisVar.setState({isConnected: false});
+                thisVar.setState({'message': "Se afișează produsele salvate local."});
+                thisVar.loadProductsFromLocalStorage();
+            }
+        });
     }
 
     loadProducts() {

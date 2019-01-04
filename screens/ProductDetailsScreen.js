@@ -1,8 +1,7 @@
 import React from 'react';
-import {AsyncStorage, Button, Image, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, Button, Image, NetInfo, StyleSheet, Text, View} from 'react-native';
 import {ServerUrl} from "../App";
 
-const weAreOnline = false; // just for debugging purposes
 
 export default class ProductDetailsScreen extends React.Component {
     constructor(props) {
@@ -12,6 +11,7 @@ export default class ProductDetailsScreen extends React.Component {
             'product': navigation.getParam('product', null),
             'wishlistButtonText': "Adaugă în wishlist",
             'wishlistButtonColor': "#841584",
+            'isConnected': true,
         };
     }
 
@@ -61,6 +61,14 @@ export default class ProductDetailsScreen extends React.Component {
                 }
             } catch (error) {
                 thisVar.props.navigation.navigate('LoginScreen');
+            }
+
+            const weAreOnline = this.state.weAreOnline;
+            if (!weAreOnline) {
+                thisVar.setState({wishlistButtonText: "Produsul a fost adăugat doar local."});
+                thisVar.setState({wishlistButtonColor: "#b2a707"});
+                thisVar.addProductToWishlistOffline(productId);
+                return;
             }
 
             fetch(ServerUrl + "/user/wishlist", {
@@ -119,6 +127,20 @@ export default class ProductDetailsScreen extends React.Component {
             }
         };
         start();
+    }
+
+    componentDidMount() {
+        let thisVar = this;
+        NetInfo.getConnectionInfo().then((connectionInfo) => {
+            const connectionType = connectionInfo.type.toString();
+            console.log('Internet connection type: ' + connectionType);
+            if (connectionType !== "none") {
+                thisVar.setState({isConnected: true});
+            }
+            else {
+                thisVar.setState({isConnected: false});
+            }
+        });
     }
 }
 
